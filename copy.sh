@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+cd $1 
 cp ~/.vimrc ./.vimrc 
 
 git add ./.vimrc 
