@@ -64,7 +64,7 @@ nmap <space> zz
 nmap n nzz
 nmap N Nzz
 "new way to get into normal mode 
-imap ;; <Esc>  
+imap fd <Esc>  
 noremap ; :
 
 " An example for a vimrc file.
