@@ -5,19 +5,6 @@
 	helper = osxkeychain
 [core]
 	excludesfile = /Users/shantanu/.gitignore_global
-[merge]
-  tool = kdiff3
-[diff]
-  tool = kdiff3
-[mergetool "kdiff3"]
-	cmd = /Applications/kdiff3.app/Contents/MacOS/kdiff3 
-  args = $base $local $other -o $output 
-	trustExitCode = false
-	path = /Applications/kdiff3.app/Contents/MacOS/kdiff3
-[difftool "kdiff3"]
-	cmd = /Applications/kdiff3.app/Contents/MacOS/kdiff3 
-  args = $base $local $other -o $output 
-	trustExitCode = false
 [alias]
 	st = status
 	co = checkout
@@ -25,3 +12,5 @@
 	ca = commit --amend -m 
 	last = log -1 HEAD
 	merge = merge --no-ff 
+[pager]
+	branch = false
