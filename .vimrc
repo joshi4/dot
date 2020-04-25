@@ -18,6 +18,7 @@ Plugin 'Townk/vim-autoclose'
 Plugin 'Raimondi/delimitMate'
 Plugin 'lervag/vim-latex'
 Plugin 'nsf/gocode', {'rtp': 'vim/'}
+Plugin 'junegunn/fzf.vim'
 call vundle#end()
 
 let g:go_fmt_command = 'goimports'
@@ -34,9 +35,20 @@ set nocp
 " Next two lines re-enables backspacing after above line disables
 "set backspace=2
 set backspace=indent,eol,start
+set noswapfile
 set nobackup
 set nowritebackup 
+set termguicolors
+set noerrorbells
 
+set autowrite "automatically save before :next or :make
+set autoread "automatically re-read changed files without asking my permission.
+
+set nohlsearch "turn off annoying search
+set showcmd		" display incomplete commands
+set incsearch		" do incremental searching
+set ignorecase " ignore case while searching
+set smartcase "but if I search for patterns with capital letters repect the case
 
 " Vim jump to the last position when reopening a file
 if has("autocmd")
@@ -56,6 +68,8 @@ set showcmd
 set autoindent
 set smartindent
 set expandtab
+
+au FocusLost * :wa   "Set vim to save file when focus is lost.
 " my key bindings
 map <C-n> :NERDTreeToggle<CR>
 inoremap <C-e> <C-o>$
@@ -87,8 +101,6 @@ endif
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 set history=50		" keep 50 lines of command line history
-set showcmd		" display incomplete commands
-set incsearch		" do incremental searching
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
@@ -99,6 +111,11 @@ map Q gq
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
+
+"Configuring fzf
+"let g:fzf_history_dir = '~/.local/share/fzf-history'
+"let g:fzf_command_prefix = 'Fzf'
+
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -138,6 +155,11 @@ if has("autocmd")
     \   exe "normal! g`\"" |
     \ endif
 
+
+  " Strip trailing white space from all the following file types.
+  autocmd FileType markdown,md,c,cpp,java,php,go,sh,py autocmd BufWritePre <buffer> %s/\s\+$//e
+  "Typescript setup 
+  autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
   augroup END
 
 else
@@ -145,6 +167,8 @@ else
   set autoindent		" always set autoindenting on
 
 endif " has("autocmd")
+
+
 
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
