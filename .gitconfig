@@ -1,5 +1,5 @@
 [user]
-	email = joshishantanu4@gmail.com
+	email = shantanu@render.com
 	name = Shantanu
 [credential]
 	helper = osxkeychain
@@ -14,3 +14,5 @@
 	merge = merge --no-ff 
 [pager]
 	branch = false
+#[url "git@github.com:"]
+#	insteadOf = https://github.com/
