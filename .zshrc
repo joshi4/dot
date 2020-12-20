@@ -24,7 +24,7 @@ ZSH_THEME="philips"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -53,12 +53,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 source $HOME/z/z.sh
 
-# Stop Gatsby collection
-export GATSBY_TELEMETRY_DISABLED=1
-
 PATH="/usr/local/git/bin:/usr/local/bin:/Users/shantanu/Development/adt-bundle-mac-x86_64-20130917/sdk/platform-tools:/Users/shantanu/bin:/Users/shantanu/.cabal/bin:/usr/local/heroku/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/Users/shantanu/Blog/pygments:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/usr/local/mysql/bin"
-# add poetry to path. 
-export PATH="$HOME/.poetry/bin:$PATH"
 export GOPATH="$HOME/go"
 export GOBIN="$HOME/go/bin"
 #export MANPATH="/usr/local/man:$MANPATH"
@@ -85,7 +80,7 @@ export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
  if [[ -n $SSH_CONNECTION ]]; then
    export EDITOR='vim'
  else
-   export EDITOR='nvim'
+   export EDITOR='vim'
  fi
 
 # Compilation flags
@@ -115,6 +110,8 @@ source $ZSH/custom/render_customization.sh
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/path.zsh.inc'; fi
+
+eval "$(starship init zsh)"
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/shantanu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/completion.zsh.inc'; fi
