@@ -98,6 +98,8 @@ export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias 'n=nvim'
+alias 'nf=nvim $(fzf)'
+alias 'hf=history | fzf'
 alias 'grb=git checkout master && git fetch origin master && git rebase origin/master'
 alias 'gce=git commit --allow-empty -m \"empty-commit\"'
 alias 'gl=git log'
@@ -107,6 +109,14 @@ alias 'src=source ~/.zshrc'
 
 source $ZSH/custom/render_aliases.sh
 source $ZSH/custom/render_customization.sh
+
+#autocorrect options 
+unsetopt correct_all  # don't correct args for cmd, no more errors on git log.
+unsetopt correct # correct commands.
+
+#fzf options 
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
 
 #nvm 
 export NVM_DIR="$HOME/.nvm"
@@ -139,7 +149,7 @@ if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shanta
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/shantanu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH="/usr/local/opt/node@12/bin:$PATH"
+export PATH="/usr/local/opt/node/bin:$PATH"
 
 eval "$(starship init zsh)"
 
