@@ -56,6 +56,7 @@ source $HOME/z/z.sh
 PATH="/usr/local/git/bin:/usr/local/bin:/Users/shantanu/Development/adt-bundle-mac-x86_64-20130917/sdk/platform-tools:/Users/shantanu/bin:/Users/shantanu/.cabal/bin:/usr/local/heroku/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/Users/shantanu/Blog/pygments:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/usr/local/mysql/bin"
 export GOPATH="$HOME/go"
 export GOBIN="$HOME/go/bin"
+export PATH=$GOBIN:$PATH
 #export MANPATH="/usr/local/man:$MANPATH"
 
 
