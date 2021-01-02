@@ -5,7 +5,7 @@
 	helper = osxkeychain
 [core]
 	excludesfile = /Users/shantanu/.gitignore_global
-  editor = nvim
+	editor = nvim
 [alias]
 	st = status
 	co = checkout
