@@ -101,7 +101,7 @@ export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
 alias 'grb=git checkout master && git fetch origin master && git rebase origin/master'
 alias 'gce=git commit --allow-empty -m \"empty-commit\"'
 alias 'gl=git log'
-alias 'gbc=git rev-parse --abbrev-ref HEAD' # git branch current. 
+alias 'gbc=git rev-parse --abbrev-ref HEAD' # git branch current
 
 alias 'n=nvim'
 alias 'nf=nvim $(fzf)'
