@@ -81,7 +81,7 @@ export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
  if [[ -n $SSH_CONNECTION ]]; then
    export EDITOR='vim'
  else
-   export EDITOR='vim'
+   export EDITOR='nvim'
  fi
 
 # Compilation flags
@@ -98,12 +98,14 @@ export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias 'n=nvim'
-alias 'nf=nvim $(fzf)'
-alias 'hf=history | fzf'
 alias 'grb=git checkout master && git fetch origin master && git rebase origin/master'
 alias 'gce=git commit --allow-empty -m \"empty-commit\"'
 alias 'gl=git log'
+alias 'gbc=git rev-parse --abbrev-ref HEAD' # git branch current. 
+
+alias 'n=nvim'
+alias 'nf=nvim $(fzf)'
+alias 'hf=history | fzf'
 alias 'sl=ls'
 alias 'ggr=go generate ./...'
 alias 'src=source ~/.zshrc'
