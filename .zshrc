@@ -70,6 +70,8 @@ export APACHE="/Library/WebServer/Documents"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home"
 
 
+# k8s modifications 
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # Render specific stuff 
 export VAULT_ADDR="https://vault.render.com:8200"
 export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
@@ -102,6 +104,8 @@ alias 'grb=git checkout master && git fetch origin master && git rebase origin/m
 alias 'gce=git commit --allow-empty -m \"empty-commit\"'
 alias 'gl=git log'
 alias 'gbc=git rev-parse --abbrev-ref HEAD' # git branch current
+alias 'gpfc=git push origin -u --force-with-lease `gbc`'
+alias 'gcof=git checkout $(git branch -a | fzf )'
 
 alias 'n=nvim'
 alias 'nf=nvim $(fzf)'
@@ -109,6 +113,24 @@ alias 'hf=history | fzf'
 alias 'sl=ls'
 alias 'ggr=go generate ./...'
 alias 'src=source ~/.zshrc'
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/shantanu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/completion.zsh.inc'; fi
+# note this should always be before nvm. 
+export PATH="/usr/local/opt/node/bin:$PATH"
+
+pr-reviewers ()
+{
+    reviewers="$(_submit-pr_choose-reviewers)";
+    hub pull-request --reviewer "${reviewers}" --push
+}
+_submit-pr_choose-reviewers ()
+{
+    hub api /orgs/renderinc/teams/dev/members | jq -r '. | map(.login) | .[]' | fzf --multi | tr '\n' ','
+}
 
 source $ZSH/custom/render_aliases.sh
 source $ZSH/custom/render_customization.sh
@@ -120,6 +142,7 @@ unsetopt correct # correct commands.
 #fzf options 
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 #nvm 
 export NVM_DIR="$HOME/.nvm"
@@ -147,12 +170,18 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/path.zsh.inc'; fi
+## RUST 
+export PATH="/Users/shantanu/go/src/github.com/racer/target/release:$HOME/.cargo/bin:$PATH"
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/shantanu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH="/usr/local/opt/node/bin:$PATH"
+export COLORTERM="truecolor"
+
+## configure Helix editor 
+export HELIX_RUNTIME="$HOME/.config/helix/runtime"
+export PATH="$HOME/.krew/bin:$PATH"
+
+# Appends every command to the history file once it is executed
+setopt inc_append_history
+# Reloads the history whenever you use it
+setopt share_history
 
 eval "$(starship init zsh)"
-
