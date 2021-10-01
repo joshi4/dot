@@ -7,12 +7,11 @@ filetype off
 " - For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
 
-" colorscheme monokai
-
 call plug#begin('~/.vim/plugged')
 "Plugins 
-Plug 'fatih/vim-go'
-Plug 'rust-lang/rust.vim'
+"Plug 'fatih/vim-go'
+"Plug 'rust-lang/rust.vim'
+"Plug 'racer-rust/vim-racer'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
@@ -23,7 +22,7 @@ Plug 'ruanyl/vim-gh-line'
 Plug 'Townk/vim-autoclose'
 Plug 'Raimondi/delimitMate'
 Plug 'lervag/vim-latex'
-Plug 'nsf/gocode', {'rtp': 'vim/'}
+"Plug 'nsf/gocode', {'rtp': 'vim/'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -32,35 +31,46 @@ Plug 'leafgarland/typescript-vim' "syntax highlighting for .ts
 Plug 'eslint/eslint'
 Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'arcticicestudio/nord-vim'
-Plug 'rakr/vim-one'
+Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
 
-"Colorscheme configuration
-let g:nord_bold_vertical_split_line = 1
-let g:nord_uniform_diff_background = 1
-let g:nord_italic = 1
-let g:nord_bold = 0 
-let g:nord_underline = 1
-colorscheme one  
+"colorscheme solarized8
+autocmd vimenter * ++nested colorscheme solarized8_flat
 
+"Colorscheme configuration
+""" nord config 
+"let g:nord_bold_vertical_split_line = 1
+"let g:nord_uniform_diff_background = 1
+"let g:nord_italic = 1
+"let g:nord_bold = 0 
+"let g:nord_underline = 1
+
+""" sonokai config
+"let g:sonokai_diagnostic_line_highlight = 1
+"let g:sonokai_diagnostic_text_highlight = 1
+"let g:sonokai_diagnostic_virtual_text = 'colored'
+"let g:sonokai_better_performance = 1
+"let g:sonokai_style = 'shusia'
+"
+
+let g:go_gopls_enabled = 0
 let g:go_fmt_command = 'goimports'
 let g:rehash256 = 1 
 "let g:ycm_autoclose_preview_window_after_completion = 1 
 "let g:ycm_auto_trigger = 1
 " use dark background for solarized/ airline theme 
-"let g:airline_theme='deus'
+let g:airline_theme='solarized_flood'
 " let g:airline_theme='one'
 
 filetype plugin indent on
 syntax on 
 " If using a dark background within the editing area and syntax highlighting
 " turn on this option as well
-set background=dark 
+set background=dark
 set number
 set relativenumber
 set nocp
-" Next two lines re-enables backspacing after above line disables
+"Next two lines re-enables backspacing after above line disables
 "set backspace=2
 set backspace=indent,eol,start
 set noswapfile
@@ -250,8 +260,29 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use U to show documentation in preview window
+"coc-go command customization.
+autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
+autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
+autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
+
+" Use U to show documentation in preview window.
 nnoremap <silent> U :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+if has("autocmd")
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+endif 
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -288,6 +319,12 @@ nnoremap <c-f>  :Rg<CR>
 " Default fzf layout
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~40%' }
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
 
 " This is the default extra key bindings
 let g:fzf_action = {
@@ -333,6 +370,20 @@ command! -bang -nargs=* Rg
 nnoremap gs :Gstatus
 """ End fugitive
 
+
+"""" Rust Settings 
+"let g:racer_experimental_completer = 1
+"let g:racer_insert_paren = 1
+"set hidden
+"augroup Racer
+"    autocmd!
+"    autocmd FileType rust nmap <buffer> gd         <Plug>(rust-def)
+"    autocmd FileType rust nmap <buffer> gs         <Plug>(rust-def-split)
+"    autocmd FileType rust nmap <buffer> gx         <Plug>(rust-def-vertical)
+"    autocmd FileType rust nmap <buffer> gt         <Plug>(rust-def-tab)
+"    autocmd FileType rust nmap <buffer> <leader>gd <Plug>(rust-doc)
+"    autocmd FileType rust nmap <buffer> <leader>gD <Plug>(rust-doc-tab)
+"augroup END
 
 """""" Typescript settings 
 
