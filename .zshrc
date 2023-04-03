@@ -46,12 +46,19 @@ ZSH_THEME="philips"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+#
+#
+#
+#
+#
+source  /Users/shantanu/go/src/github.com/zsh-syntax-highlighting/zsh-syntax-highlighting.sh
+
 plugins=(git brew golang web-search gitfast zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-source $HOME/z/z.sh
+# source $HOME/z/z.sh
 
 PATH="/usr/local/git/bin:/usr/local/bin:/Users/shantanu/Development/adt-bundle-mac-x86_64-20130917/sdk/platform-tools:/Users/shantanu/bin:/Users/shantanu/.cabal/bin:/usr/local/heroku/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/Users/shantanu/Blog/pygments:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/usr/local/mysql/bin"
 export GOPATH="$HOME/go"
@@ -105,7 +112,7 @@ alias 'gce=git commit --allow-empty -m \"empty-commit\"'
 alias 'gl=git log'
 alias 'gbc=git rev-parse --abbrev-ref HEAD' # git branch current
 alias 'gpfc=git push origin -u --force-with-lease `gbc`'
-alias 'gcof=git checkout $(git branch -a | fzf )'
+alias 'gcof=git checkout $(git branch -a --sort=-committerdate | fzf )'
 
 alias 'n=nvim'
 alias 'nf=nvim $(fzf)'
@@ -113,6 +120,15 @@ alias 'hf=history | fzf'
 alias 'sl=ls'
 alias 'ggr=go generate ./...'
 alias 'src=source ~/.zshrc'
+alias 'gosrc=/Users/shantanu/gosrc/goroot/bin/go'
+
+## Homebrew setup 
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+export HOMEBREW_PREFIX="/opt/homebrew";
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+export HOMEBREW_REPOSITORY="/opt/homebrew";
+export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/path.zsh.inc'; fi
@@ -120,7 +136,7 @@ if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shanta
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/shantanu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/completion.zsh.inc'; fi
 # note this should always be before nvm. 
-export PATH="/usr/local/opt/node/bin:$PATH"
+export PATH="/opt/homebrew/bin/node:/usr/local/opt/node/bin:$PATH"
 
 pr-reviewers ()
 {
@@ -170,8 +186,19 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
+## PYTHON VIRTUALENV
+export VENV_PATH="$HOME/.virtualenvs"
+export WORKON_HOME=$VENV_PATH
+# add poetry to PATH 
+export PATH="${VENV_PATH}/bin:$PATH"
+
+alias start_venv='source $(poetry env info --path)/bin/activate'
 ## RUST 
 export PATH="/Users/shantanu/go/src/github.com/racer/target/release:$HOME/.cargo/bin:$PATH"
+
+#java 
+export PATH="/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin:$PATH" 
+
 
 export COLORTERM="truecolor"
 
@@ -184,4 +211,7 @@ setopt inc_append_history
 # Reloads the history whenever you use it
 setopt share_history
 
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
+eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
