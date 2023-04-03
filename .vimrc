@@ -1,25 +1,23 @@
 filetype off
 
 
-"set runtime path to include vundle and initialize
-" set rtp+=~/.vim/bundle/Vundle.vim
-" " Specify a directory for plugins
+"set runtime path to include vundle and initialize set
+"rtp+=~/.vim/bundle/Vundle.vim " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
 
 call plug#begin('~/.vim/plugged')
-"Plugins 
-"Plug 'fatih/vim-go'
-"Plug 'rust-lang/rust.vim'
-"Plug 'racer-rust/vim-racer'
+"Plugins Plug 'fatih/vim-go' Plug 'rust-lang/rust.vim' Plug
+"'racer-rust/vim-racer'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree' 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired' 
 Plug 'ruanyl/vim-gh-line'
-Plug 'Townk/vim-autoclose'
 Plug 'Raimondi/delimitMate'
 Plug 'lervag/vim-latex'
 "Plug 'nsf/gocode', {'rtp': 'vim/'}
@@ -29,13 +27,28 @@ Plug 'junegunn/fzf.vim'
 Plug 'ianks/vim-tsx' "syntax highlighting for tsx 
 Plug 'leafgarland/typescript-vim' "syntax highlighting for .ts
 Plug 'eslint/eslint'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+"Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'rescript-lang/vim-rescript'
+Plug 'github/copilot.vim'
+Plug 'Olical/conjure'
+Plug 'nanotee/zoxide.vim'
 call plug#end()
 
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" set filetypes as typescriptreact
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+
 "colorscheme solarized8
-autocmd vimenter * ++nested colorscheme solarized8_flat
+"autocmd vimenter * ++nested colorscheme solarized8_flat
+autocmd vimenter * ++nested colorscheme dracula
 
 "Colorscheme configuration
 """ nord config 
@@ -44,23 +57,15 @@ autocmd vimenter * ++nested colorscheme solarized8_flat
 "let g:nord_italic = 1
 "let g:nord_bold = 0 
 "let g:nord_underline = 1
-
-""" sonokai config
-"let g:sonokai_diagnostic_line_highlight = 1
-"let g:sonokai_diagnostic_text_highlight = 1
-"let g:sonokai_diagnostic_virtual_text = 'colored'
-"let g:sonokai_better_performance = 1
-"let g:sonokai_style = 'shusia'
-"
-
 let g:go_gopls_enabled = 0
 let g:go_fmt_command = 'goimports'
 let g:rehash256 = 1 
 "let g:ycm_autoclose_preview_window_after_completion = 1 
 "let g:ycm_auto_trigger = 1
 " use dark background for solarized/ airline theme 
-let g:airline_theme='solarized_flood'
-" let g:airline_theme='one'
+"let g:airline_theme='solarized_flood'
+let g:airline_theme='dracula'
+"let g:airline_theme='one'
 
 filetype plugin indent on
 syntax on 
@@ -135,9 +140,6 @@ if v:progname =~? "evim"
   finish
 endif
 
-" Use Vim settings, rather than Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
 set history=50		" keep 50 lines of command line history
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -218,7 +220,7 @@ endif
 
 " disable vim-go :GoDef short cut (gd)
 " this is handled by LanguageClient [LC]
-let g:go_def_mapping_enabled = 0
+"let g:go_def_mapping_enabled = 0
 " -------------------------------------------------------------------------------------------------
 " coc.nvim default settings
 " -------------------------------------------------------------------------------------------------
@@ -235,24 +237,54 @@ set shortmess+=c
 set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+"" inoremap <silent><expr> <Tab>
+""       \ coc#pum#visible() ? "\<C-n>":
+""       \ CheckBackspace() ? "\<Tab>" :
+""       \ coc#refresh()
+"" 
+""inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : '\<C-h>'
+""inoremap <expr><S-tab> coc#pum#visible() ? coc#pum#prev(1) : '\<C-h>'
 
-function! s:check_back_space() abort
+"""
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+
+nnoremap <silent> <leader>J :call GoToJump()<cr>
+
+function! GoToJump()
+  jumps
+  let j = input("Please select your jump: ")
+  while len(j) == 0
+    let j = input("Invalid. Enter filename:")
+  endwhile
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+endfunction
+
+
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -266,45 +298,55 @@ autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
 autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
 
 " Use U to show documentation in preview window.
-nnoremap <silent> U :call <SID>show_documentation()<CR>
+nnoremap <silent> U :call ShowDocumentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 if has("autocmd")
   autocmd CursorHold * silent call CocActionAsync('highlight')
-  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+  autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 endif 
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-vmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 " Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
+
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
 
 "--------------------------------
 " fzf customization
@@ -314,7 +356,7 @@ nnoremap <silent> <leader>o :Files<CR>
 nnoremap <silent> <leader>O :FZF!<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <Leader>t  :Tags<CR>
-nnoremap <c-f>  :Rg<CR>
+"nnoremap <c-f>  :Rg<CR> commented out since I don't use this often enough
 
 " Default fzf layout
 " - down / up / left / right
@@ -367,10 +409,15 @@ command! -bang -nargs=* Rg
 
 
 """ Configure fugitive 
-nnoremap gs :Gstatus
+nnoremap gs :G
+nnoremap gl :G log
+nnoremap gb :G blame
+
 """ End fugitive
 
 
+
+""" Configure leap 
 """" Rust Settings 
 "let g:racer_experimental_completer = 1
 "let g:racer_insert_paren = 1
@@ -388,6 +435,11 @@ nnoremap gs :Gstatus
 """""" Typescript settings 
 
 let g:typescript_indent_disable = 1 "turn of automatic indenter for chained calls" 
+
+"copilot settings
+imap <silent><script><expr> <C-j> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
 
 "make error appear in quickfix window"
 autocmd QuickFixCmdPost [^l]* nested cwindow 
