@@ -1,5 +1,5 @@
 [user]
-	email = shantanu@render.com
+	email = joshishantanu4@gmail.com
 	name = Shantanu
 [credential]
 	helper = osxkeychain
@@ -13,7 +13,13 @@
 	ca = commit --amend -m 
 	last = log -1 HEAD
 	merge = merge --no-ff 
+	push-this = push -u origin HEAD
 [pager]
 	branch = false
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
