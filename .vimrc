@@ -37,6 +37,7 @@ Plug 'rescript-lang/vim-rescript'
 Plug 'github/copilot.vim'
 Plug 'Olical/conjure'
 Plug 'nanotee/zoxide.vim'
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 " Use Vim settings, rather than Vi settings (much better!).
