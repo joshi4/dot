@@ -1,11 +1,24 @@
 [user]
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBdYuMkTy8Nlp47WU+3VuycUmpcF3G8pc8iqwaEQJFJ0
 	email = joshishantanu4@gmail.com
 	name = Shantanu
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
+
 [credential]
 	helper = osxkeychain
+
 [core]
 	excludesfile = /Users/shantanu/.gitignore_global
 	editor = nvim
+
 [alias]
 	st = status
 	co = checkout
@@ -14,12 +27,16 @@
 	last = log -1 HEAD
 	merge = merge --no-ff 
 	push-this = push -u origin HEAD
+
 [pager]
 	branch = false
+
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
