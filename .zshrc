@@ -57,19 +57,26 @@ plugins=(git brew golang web-search gitfast zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-# source $HOME/z/z.sh
+add_path() {
+  if [[ -n $IN_NIX_SHELL ]]; then
+    echo "IN NIX SHELL"
+    return
+  fi
+  
+  #don't add duplicates
+  if [[ ":$PATH:" == *":$1:"* ]]; then
+    return
+  fi
 
-PATH="/usr/local/git/bin:/usr/local/bin:/Users/shantanu/Development/adt-bundle-mac-x86_64-20130917/sdk/platform-tools:/Users/shantanu/bin:/Users/shantanu/.cabal/bin:/usr/local/heroku/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/Users/shantanu/Blog/pygments:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/usr/local/mysql/bin"
+  PATH="$1:${PATH:+"$PATH"}"
+}
+
+add_path "/usr/local/git/bin:/usr/local/bin:/Users/shantanu/Development/adt-bundle-mac-x86_64-20130917/sdk/platform-tools:/Users/shantanu/bin:/Users/shantanu/.cabal/bin:/usr/local/heroku/bin:/opt/local/bin:/opt/local/sbin:/usr/local/go/bin:/Users/shantanu/Blog/pygments:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/usr/local/mysql/bin"
 export GOPATH="$HOME/go"
 export GOBIN="$HOME/go/bin"
-export PATH=$GOBIN:$PATH
+add_path "$GOBIN"
 #export MANPATH="/usr/local/man:$MANPATH"
 
-
-###### Adding android platform-tools to the path variable. 
-export PATH="$PATH:$HOME/Development/adt-bundle-mac-x86_64-20130917/sdk/platform-tools"
-##### Setting Sublime Text 2 as default editor ##### 
 
 #setting the editor variable.
 export EDITOR=nvim
@@ -78,10 +85,7 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Hom
 
 
 # k8s modifications 
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-# Render specific stuff 
-export VAULT_ADDR="https://vault.render.com:8200"
-export RENDER_API_PATH="$GOPATH/src/github.com/renderinc/api"
+add_path "${KREW_ROOT:-$HOME/.krew}/bin"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -123,7 +127,7 @@ alias 'src=source ~/.zshrc'
 alias 'gosrc=/Users/shantanu/gosrc/goroot/bin/go'
 
 ## Homebrew setup 
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+add_path "/opt/homebrew/bin:/opt/homebrew/sbin"
 export HOMEBREW_PREFIX="/opt/homebrew";
 export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
 export HOMEBREW_REPOSITORY="/opt/homebrew";
@@ -136,17 +140,7 @@ if [ -f '/Users/shantanu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/shanta
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/shantanu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/shantanu/google-cloud-sdk/completion.zsh.inc'; fi
 # note this should always be before nvm. 
-export PATH="/opt/homebrew/bin/node:/usr/local/opt/node/bin:$PATH"
-
-pr-reviewers ()
-{
-    reviewers="$(_submit-pr_choose-reviewers)";
-    hub pull-request --reviewer "${reviewers}" --push
-}
-_submit-pr_choose-reviewers ()
-{
-    hub api /orgs/renderinc/teams/dev/members | jq -r '. | map(.login) | .[]' | fzf --multi | tr '\n' ','
-}
+add_path "/opt/homebrew/bin/node:/usr/local/opt/node/bin"
 
 source $ZSH/custom/render_aliases.sh
 source $ZSH/custom/render_customization.sh
@@ -190,21 +184,17 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export VENV_PATH="$HOME/.virtualenvs"
 export WORKON_HOME=$VENV_PATH
 # add poetry to PATH 
-export PATH="${VENV_PATH}/bin:$PATH"
+add_path "${VENV_PATH}/bin}"
 
 alias start_venv='source $(poetry env info --path)/bin/activate'
 ## RUST 
-export PATH="/Users/shantanu/go/src/github.com/racer/target/release:$HOME/.cargo/bin:$PATH"
+add_path "/Users/shantanu/go/src/github.com/racer/target/release:$HOME/.cargo/bin"
 
 #java 
-export PATH="/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin:$PATH" 
+add_path "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home/bin"
 
 
 export COLORTERM="truecolor"
-
-## configure Helix editor 
-export HELIX_RUNTIME="$HOME/.config/helix/runtime"
-export PATH="$HOME/.krew/bin:$PATH"
 
 # Appends every command to the history file once it is executed
 setopt inc_append_history
@@ -213,5 +203,25 @@ setopt share_history
 
 alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
+# Nix
+#
+# https://ianthehenry.com/posts/how-to-learn-nix/nix-zshell/
+export NIX_BUILD_SHELL='/Users/shantanu/src/github.com/joshi4/nix-zsh/result'
+
+# so ls works in nix and direnv shells 
+alias ls='ls --color=auto'
+
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ] && [[ -z $IN_NIX_SHELL ]]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+
+export PATH
+#prompt_nix_shell_setup
+# End Nix
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
+eval "$(atuin init zsh --disable-up-arrow)"
+# silence verbose direnv logs 
+# export DIRENV_LOG_FORMAT=
+export DIRENV_LOG_FORMAT=$'\E[1mdirenv: %s\E[0m'
+eval "$(direnv hook zsh)"
