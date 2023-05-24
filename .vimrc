@@ -20,7 +20,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'ruanyl/vim-gh-line'
 Plug 'Raimondi/delimitMate'
 Plug 'lervag/vim-latex'
-"Plug 'nsf/gocode', {'rtp': 'vim/'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -33,11 +32,10 @@ Plug 'peitalin/vim-jsx-typescript'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'rescript-lang/vim-rescript'
 Plug 'github/copilot.vim'
-Plug 'Olical/conjure'
 Plug 'nanotee/zoxide.vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
 " Use Vim settings, rather than Vi settings (much better!).
@@ -349,6 +347,9 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
+
+"coc-extensions 
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-go', 'coc-tsserver', 'coc-pyright']
 "--------------------------------
 " fzf customization
 " ---------------------------------
