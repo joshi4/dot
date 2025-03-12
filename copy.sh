@@ -34,5 +34,10 @@ cp ~/.config/starship.toml ./.config/starship.toml
 git add ./.config/starship.toml
 git commit -m "starship: update"
 
+
+cp ~/.config/nvim/coc-settings.json ./.config/nvim/coc-settings.json
+git add ./.config/nvim/coc-settings.json
+git commit -m "coc-settings: update"
+
 git push -f origin master
 
