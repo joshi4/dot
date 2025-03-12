@@ -29,5 +29,10 @@ git commit -m "oh-my-zsh: update"
 git add ./.config/ghostty/config
 git commit -m "ghostty: update"
 
+
+cp ~/.config/starship.toml ./.config/starship.toml
+git add ./.config/starship.toml
+git commit -m "starship: update"
+
 git push -f origin master
 
