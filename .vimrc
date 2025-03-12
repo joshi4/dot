@@ -11,32 +11,96 @@ call plug#begin('~/.vim/plugged')
 "'racer-rust/vim-racer'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/nerdtree' 
+Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired' 
+Plug 'tpope/vim-unimpaired'
 Plug 'ruanyl/vim-gh-line'
 Plug 'Raimondi/delimitMate'
+Plug 'sainnhe/everforest'
 Plug 'lervag/vim-latex'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'ianks/vim-tsx' "syntax highlighting for tsx 
-Plug 'leafgarland/typescript-vim' "syntax highlighting for .ts
+Plug 'ianks/vim-tsx' "syntax highlighting for tsx
 Plug 'eslint/eslint'
 "Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'github/copilot.vim'
 Plug 'nanotee/zoxide.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'hashivim/vim-terraform'
+
+
+
+" Deps
+Plug 'stevearc/dressing.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+
+" Optional deps
+Plug 'hrsh7th/nvim-cmp'
+Plug 'nvim-tree/nvim-web-devicons' "or Plug 'echasnovski/mini.icons'
+Plug 'HakonHarnes/img-clip.nvim'
+" Plug 'zbirenbaum/copilot.lua'
+
+" Yay, pass source=true if you want to build from source
+Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': { -> avante#build('source=true') } }
 call plug#end()
+
+lua << EOF
+require ("avante").setup()
+
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+
+  -- List of parsers to ignore installing (or "all")
+  ignore_install = { "javascript" },
+
+  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+  highlight = {
+    enable = true,
+
+    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
+    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
+    -- the name of the parser)
+    -- list of language that will be disabled
+    disable = { "c", "rust" },
+    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    disable = function(lang, buf)
+        local max_filesize = 100 * 1024 -- 100 KB
+        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        if ok and stats and stats.size > max_filesize then
+            return true
+        end
+    end,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
 
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -45,17 +109,21 @@ set nocompatible
 " set filetypes as typescriptreact
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 
-"colorscheme solarized8
+"colorscheme afterglow
+colorscheme nord
+
 "autocmd vimenter * ++nested colorscheme solarized8_flat
-autocmd vimenter * ++nested colorscheme dracula
+"autocmd vimenter * ++nested colorscheme dracula
+autocmd vimenter * ++nested colorscheme nord
 
 "Colorscheme configuration
 """ nord config 
-"let g:nord_bold_vertical_split_line = 1
-"let g:nord_uniform_diff_background = 1
-"let g:nord_italic = 1
-"let g:nord_bold = 0 
-"let g:nord_underline = 1
+let g:nord_bold_vertical_split_line = 1
+let g:nord_uniform_diff_background = 1
+let g:nord_italic = 1
+let g:nord_bold = 1 
+let g:nord_underline = 1
+
 let g:go_gopls_enabled = 0
 let g:go_fmt_command = 'goimports'
 let g:rehash256 = 1 
@@ -63,7 +131,7 @@ let g:rehash256 = 1
 "let g:ycm_auto_trigger = 1
 " use dark background for solarized/ airline theme 
 "let g:airline_theme='solarized_flood'
-let g:airline_theme='dracula'
+let g:airline_theme='nord'
 "let g:airline_theme='one'
 
 filetype plugin indent on
@@ -320,7 +388,7 @@ nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 " Show all diagnostics
-nnoremap <silent> <leader>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>d  :<C-u>CocList diagnostics<cr>
 " Manage extensions
 nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
 " Show commands
@@ -447,3 +515,19 @@ let g:copilot_no_tab_map = v:true
 autocmd QuickFixCmdPost [^l]* nested cwindow 
 autocmd QuickFixCmdPost l* nested lwindow 
 autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript "format with prettier
+
+"terraform settings 
+
+" set filetypes
+autocmd BufNewFile,BufRead *.tf,*.tfvars set filetype=terraform
+autocmd BufNewFile,BufRead *.tfstate,*.tfstate.backup set filetype=json
+autocmd BufNewFile,BufRead *.tf,terraform.rc,*.terraformrc set filetype=hcl
+
+let g:terraform_fmt_on_save = 1
+let g:terraform_align=1
+
+"terraform normal mode key bindings
+nnoremap <leader>ti :!terraform init<CR>
+nnoremap <leader>tv :!terraform validate<CR>
+nnoremap <leader>tp :!terraform plan<CR>
+"consciously leaving approve out of this.
