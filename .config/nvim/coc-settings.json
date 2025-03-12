@@ -1,0 +1,79 @@
+{
+  "[python]": {
+    "coc.preferences.formatOnSave": true,
+    "coc.preferences.formatOnType": true
+  },
+  "[go]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "languageserver": {
+    "terraform": {
+      "command": "terraform-ls",
+      "args": [
+        "serve"
+      ],
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
+    },
+    "go": {
+      "command": "gopls",
+      "rootPatterns": [
+        "go.mod",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "filetypes": [
+        "go"
+      ],
+      "initializationOptions": {},
+      "settings": {
+        "gopls": {
+          "analyses": {
+            "composites": true,
+            "fieldalignment": false,
+            "fillreturns": true,
+            "nonewvars": true,
+            "printf": true,
+            "shift": true,
+            "unusedparams": true
+          },
+          "buildFlags": [],
+          "codelenses": {
+            "generate": true,
+            "gc_details": true,
+            "regenerate_cgo": true,
+            "tidy": true,
+            "upgrade_dependency": true,
+            "vendor": true,
+            "why": true
+          },
+          "completionDocumentation": true,
+          "deepCompletion": true,
+          "completeUnimported": true,
+          "diagnosticsDelay": "500ms",
+          "directoryFilters": [
+            "-node_modules"
+          ],
+          "hoverKind": "FullDocumentation",
+          "linkTarget": "pkg.go.dev",
+          "linksInHover": true,
+          "local": "golang.org/x/tools/gopls@latest",
+          "semanticTokens": false,
+          "staticcheck": true,
+          "symbolMatcher": "fuzzy",
+          "usePlaceholders": false,
+          "verboseOutput": false
+        }
+      }
+    }
+  },
+  "eslint.autoFixOnSave": true,
+  "eslint.format.enable": true,
+  "eslint.quiet": true,
+  "eslint.run": "onSave"
+}
