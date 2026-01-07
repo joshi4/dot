@@ -509,6 +509,7 @@ let g:typescript_indent_disable = 1 "turn of automatic indenter for chained call
 "copilot settings
 imap <silent><script><expr> <C-j> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
+let g:copilot_enabled = 0
 
 
 "make error appear in quickfix window"
