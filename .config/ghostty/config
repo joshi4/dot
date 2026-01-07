@@ -4,3 +4,4 @@ font-size = 15
 copy-on-select = true
 quit-after-last-window-closed = true
 macos-icon = xray
+keybind = shift+enter=text:\n
