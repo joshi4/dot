@@ -4,6 +4,7 @@ cp ~/.zshrc ./.zshrc
 cp ~/.gitconfig ./.gitconfig
 cp ~/.tmux.conf ./.tmux.conf
 cp ~/.config/shell/common.sh ./common.sh
+cp -R ~/.config/nvim ./nvim
 
 cp ~/.oh-my-zsh/custom/aliases.sh ./.oh-my-zsh/custom/aliases.sh
 cp ~/.oh-my-zsh/custom/customization.sh ./.oh-my-zsh/custom/customization.sh
@@ -29,15 +30,11 @@ git commit -m "oh-my-zsh: update"
 git add ./.config/ghostty/config
 git commit -m "ghostty: update"
 
-
 cp ~/.config/starship.toml ./.config/starship.toml
 git add ./.config/starship.toml
 git commit -m "starship: update"
 
-
-cp ~/.config/nvim/coc-settings.json ./.config/nvim/coc-settings.json
-git add ./.config/nvim/coc-settings.json
-git commit -m "coc-settings: update"
+git add ./nvim
+git commit -m "nvim update"
 
 git push -f origin master
-
