@@ -107,6 +107,7 @@ add_path "$BUN_INSTALL/bin"
 #export PATH="$HOME/bin:$PATH"
 # add_path "$HOME/bin"
 add_path "$HOME/src/github.com/getsavvyinc/savvy-cli"
+add_path "$HOME/.claude/local"
 
 
 #https://github.com/Homebrew/homebrew-core/issues/181152
@@ -138,3 +139,4 @@ eval "$(savvy init zsh)"
 #}
 #add-zsh-hook precmd __savvy_prompt_pre_cmd__
 export PATH="${HOME}/.local/bin:$PATH"
+alias claude="/Users/shantanu/.claude/local/claude"
